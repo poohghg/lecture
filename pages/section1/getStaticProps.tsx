@@ -8,6 +8,7 @@ interface Props {
 const Example: NextPage<Props> = ({ data, title }) => {
   return (
     <main>
+      <h1>getStaticProps</h1>
       <div>{data}</div>
     </main>
   );
