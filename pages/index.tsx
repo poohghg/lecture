@@ -2,6 +2,8 @@ import Head from 'next/head';
 import { Inter } from 'next/font/google';
 import styles from '@/styles/Home.module.css';
 import Header from '@/components/common/Header';
+import RightBox from '@/components/RightBox';
+import MapSection from '@/components/home/MapSection';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -15,8 +17,18 @@ export default function Home() {
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
       <>
-        <Header />
-        <main className={styles.main}>ㅎㅇ</main>
+        <Header RightElements={<RightBox />} />
+        <main
+          className={styles.main}
+          style={{
+            position: 'relative',
+            width: '100%',
+            height: '100%',
+            overflow: 'hidden',
+          }}
+        >
+          <MapSection />
+        </main>
       </>
     </>
   );

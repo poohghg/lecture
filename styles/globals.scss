@@ -1,4 +1,37 @@
-:root {
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+main {
+  width: 100%;
+  height: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+// __next는 따로 스타일링하지 않는다
+// contents는 접근성 트리에서 제외
+// box요소를 생성하지 않음
+@layer base {
+  #__next {
+    display: contents;
+  }
+}
+
+/* :root {
   --max-width: 1100px;
   --border-radius: 12px;
   --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
@@ -72,19 +105,6 @@
     --card-border-rgb: 200, 200, 200;
   }
 }
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
@@ -104,4 +124,4 @@ a {
   html {
     color-scheme: dark;
   }
-}
+} */

@@ -7,6 +7,7 @@ import example from '/public/example.jpg';
 const Images: NextPage = () => {
   return (
     <main>
+      <div style={{ height: '150vh' }}></div>
       {/* loading check */}
       {/*<section style={{ height: '500vh' }}>long long content</section>*/}
 
@@ -29,11 +30,11 @@ const Images: NextPage = () => {
       {/*<hr style={{ margin: '32px 0' }} />*/}
 
       <h1>next/image</h1>
-
       <figure>
         <Image
           src={example}
           alt="v13 image"
+
           // width={500}
           // height={100}
           // placeholder="blur"
@@ -41,15 +42,10 @@ const Images: NextPage = () => {
         <figcaption>v13 image</figcaption>
       </figure>
 
-      <figure>
-        <Image
-          src="https://inflearn-nextjs.vercel.app/example.jpg"
-          alt="v13 image"
-          width={500}
-          height={100}
-        />
+      {/* <figure>
+        <Image src={example} alt="v13 image" width={100} height={100} />
         <figcaption>v13 image</figcaption>
-      </figure>
+      </figure> */}
 
       {/* ERROR */}
       {/*<figure>*/}
@@ -57,24 +53,23 @@ const Images: NextPage = () => {
       {/*  <figcaption>v13 image</figcaption>*/}
       {/*</figure>*/}
 
-      <figure style={{ position: 'relative', width: '500px', height: '100px' }}>
+      {/* <figure style={{ position: 'relative', width: '500px', height: '100px' }}>
         <Image
-          src="https://inflearn-nextjs.vercel.app/example.jpg"
+          src={example}
           alt="v13 fill"
           fill
           style={{ objectFit: 'cover' }}
+          placeholder="blur"
+          quality={100}
         />
-      </figure>
-
+      </figure> */}
       <hr style={{ margin: '32px 0' }} />
-
       <h1>next/legacy/image</h1>
-
       {/** statically import */}
-      <figure>
+      {/* <figure>
         <LegacyImage src={example} alt="example image" />
         <figcaption>intrinsic static image</figcaption>
-      </figure>
+      </figure> */}
 
       {/* ERROR */}
       {/*<figure>*/}
@@ -83,7 +78,7 @@ const Images: NextPage = () => {
       {/*</figure>*/}
 
       {/** path string */}
-      <figure>
+      {/* <figure>
         <LegacyImage
           src="/example.jpg"
           alt="intrinsic image"
@@ -125,7 +120,7 @@ const Images: NextPage = () => {
           />
         </div>
         <figcaption>fill image</figcaption>
-      </figure>
+      </figure> */}
 
       <hr style={{ margin: '32px 0' }} />
     </main>
