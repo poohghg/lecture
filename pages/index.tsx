@@ -1,13 +1,27 @@
 import Head from 'next/head';
 import { Inter } from 'next/font/google';
-import styles from '@/styles/Home.module.css';
+import styles from '../styles/main.module.scss';
 import Header from '@/components/common/Header';
 import RightBox from '@/components/RightBox';
 import MapSection from '@/components/home/MapSection';
+import { Store } from '../types/store';
+import { useActions, useValues } from '@/context/procider';
+import { useEffect } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export default function Home() {
+interface Props {
+  // Store;
+  stores: Store[];
+}
+
+export default function Home({ stores }: Props) {
+  const { setStores } = useActions();
+
+  useEffect(() => {
+    setStores(stores);
+  }, []);
+
   return (
     <>
       <Head>
@@ -18,18 +32,19 @@ export default function Home() {
       </Head>
       <>
         <Header RightElements={<RightBox />} />
-        <main
-          className={styles.main}
-          style={{
-            position: 'relative',
-            width: '100%',
-            height: '100%',
-            overflow: 'hidden',
-          }}
-        >
+        <main className={styles.main} style={{}}>
           <MapSection />
         </main>
       </>
     </>
   );
+}
+
+export async function getStaticProps() {
+  const stores = await (await import('../public/stores.json')).default;
+
+  return {
+    props: { stores },
+    revalidate: 60 * 60,
+  };
 }

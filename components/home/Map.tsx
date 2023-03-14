@@ -2,7 +2,7 @@ import { INITIAL_CENTER, INITIAL_ZOOM } from '@/hooks/useMap';
 import { NaverMap } from '@/types/map';
 import { Coordinates } from '@/types/store';
 import Script from 'next/script';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import styles from '../../styles/map.module.scss';
 
 type Props = {
@@ -20,7 +20,7 @@ const Map = ({
 }: Props) => {
   const mapRef = useRef<NaverMap | null>(null);
 
-  const initializeMap = () => {
+  const initializeMap = useCallback(() => {
     const mapOptions = {
       center: new window.naver.maps.LatLng(...initialCenter),
       zoom: initialZoom,
@@ -31,12 +31,11 @@ const Map = ({
         position: naver.maps.Position.BOTTOM_LEFT,
       },
     };
-
     /** https://navermaps.github.io/maps.js.ncp/docs/tutorial-2-Getting-Started.html */
     const map = new window.naver.maps.Map(mapId, mapOptions);
     mapRef.current = map;
     if (onLoad) onLoad(map);
-  };
+  }, []);
 
   useEffect(() => {
     return () => {
