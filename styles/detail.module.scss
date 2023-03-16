@@ -45,6 +45,7 @@ $section-padding-top: 8px;
 
     border: none;
     background-color: transparent;
+    transition: transform 300ms ease-in 500ms;
 
     &:disabled {
       opacity: 0.2;
@@ -54,6 +55,12 @@ $section-padding-top: 8px;
       transform: rotate(180deg);
     }
 
+    &:enabled {
+      svg {
+        animation: bounce 500ms infinite alternate ease-in;
+      }
+    }
+
     @keyframes bounce {
       from {
         transform: translateY(0);
@@ -61,9 +68,6 @@ $section-padding-top: 8px;
       to {
         transform: translateY(-5px);
       }
-    }
-    svg {
-      animation: bounce 500ms infinite alternate ease-in;
     }
   }
 

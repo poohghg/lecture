@@ -9,21 +9,18 @@ interface Props {}
 const Markers = ({}: Props) => {
   const { map, stores, currentStore } = useValues();
   const { setCurrentStore } = useActions();
-  // const handelClick = useCallback((store: Store) => setCurrentStore(store), []);
+  const handelClick = useCallback((store: Store) => setCurrentStore(store), []);
   if (!map || !stores) return null;
-  console.log('currentStore', currentStore);
+  // console.log('currentStore', currentStore);
   return (
     <>
       {stores.map((store) => (
         <Marker
           key={store.nid}
-          coordinates={store.coordinates}
           map={map}
-          icon={generateStoreMarkerIcon(
-            store.season
-            // currentStore?.nid === store.nid
-          )}
-          onClick={() => setCurrentStore(store)}
+          store={store}
+          flage={store.nid === currentStore?.nid}
+          handelClick={handelClick}
         />
       ))}
     </>

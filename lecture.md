@@ -95,7 +95,7 @@ No Pre-rendering (기본 리액트 앱)
 - getStaticProps는 페이지에서만 사용가능하다. 페이지가 아닌 파일에서는 사용 할 수 없다.
   - 이는 리액트는 페이지가 렌더링 되기 이전에 모든 필요한 데이터를 가지고 있어야 하기 때문이다.
 
-- 페이지의 데이터가 자주 변경된다면 서버사이드 렌더링이나 프리렌더링을 하지말자!!
+- 페이지의 데이터가 자주 변경된다면 서버사이드 렌더링을 사용하거나, 프리렌더링을 하지말자!!
 
 getStaticProps는 오직 서버에서만 작동한다.클라이언트에서는 사용되지 않고,브라우저를 위한 js번들에도 포함되지 않는다.
 
@@ -172,13 +172,78 @@ export async function getStaticProps({ params }) {
 }
 ```
 
+https://nextjs.org/docs/api-reference/data-fetching/get-static-paths
+
+getStaticPaths
+
+- 페이지의 경로를 정적으로 생성해둔다(빌드시점).
+- return된 배열의 parmas name의 페이지가 생성된다.
+
 ssg에서 페이지의 동적생성?
 
  `fallback` 에 대한 부분은 paths에서 리턴되지 않은 경로에 대해서 어떻게 처리할지를 정하는 것인데, 우선은 아래의 내용만 알고 넘어가도 무관하다.
 
-- `false` : 404 를 전달하겠다.
-- `true` : 404를 전달하지 않고, "fallback" 버전의 페이지를 첫 request에서 보여준 후, 페이지가 생성되고 나면 그 이후의 request부터는 생성된 페이지를 보여주겠다.
+- `false` : 404페이지로 전달한다.
+- `true` : 바로 404를 전달하지 않고, "fallback" 버전의 페이지를 첫 request에서 보여준 후, 페이지가 생성되고 나면 그 이후의 request부터는 생성된 페이지를 보여준다.
+
+  - 바로 404페이지로 보내지 않고,getStaticProps을 호출한다.
+  - 빌드시 정적페이지가 많을때 일부페이지만 생성
+  - DB에 동적으로 추가되는 데이터가 있고 페이지로 사용될때 사용
+  - 동적으로 요청싱 생성된 페이지는 정적페이지로 전환되어 관린된다.
+  - > Instead, you may statically generate a small subset of pages and use `fallback: true` for the rest. When someone requests a page that is not generated yet, the user will see the page with a loading indicator or skeleton component.
+    >
+    > Shortly after, `getStaticProps` finishes and the page will be rendered with the requested data. From now on, everyone who requests the same page will get the statically pre-rendered page.
+  - > ```jsx
+    > // pages/posts/[id].js
+    > import { useRouter } from 'next/router'
+    > 
+    > function Post({ post }) {
+    >   const router = useRouter()
+    > 
+    >   // If the page is not yet generated, this will be displayed
+    >   // initially until getStaticProps() finishes running
+    >   if (router.isFallback) {
+    >     return <div>Loading...</div>
+    >   }
+    > 
+    >   // Render post...
+    > }
+    > 
+    > // This function gets called at build time
+    > export async function getStaticPaths() {
+    >   return {
+    >     // Only `/posts/1` and `/posts/2` are generated at build time
+    >     paths: [{ params: { id: '1' } }, { params: { id: '2' } }],
+    >     // Enable statically generating additional pages
+    >     // For example: `/posts/3`
+    >     fallback: true,
+    >   }
+    > }
+    > 
+    > // This also gets called at build time
+    > export async function getStaticProps({ params }) {
+    >   // params contains the post `id`.
+    >   // If the route is like /posts/1, then params.id is 1
+    >   const res = await fetch(`https://.../posts/${params.id}`)
+    >   const post = await res.json()
+    > 
+    >   // Pass post data to the page via props
+    >   return {
+    >     props: { post },
+    >     // Re-generate the post at most once per second
+    >     // if a request comes in
+    >     revalidate: 1,
+    >   }
+    > }
+    > 
+    > export default Post
+    > ```
+
 - `blocking` : 서버 사이드 렌더링을 통해 HTML이 생성되기 까지 기다리겠다.
+
+  - 새롭게 접근한 경로의 html이 생성될때 까지 기다린다.
+  - Fallback false의 경우 html이 생성될 경우 fallback ui를 보여주지만 blocking을 단지 html이 생성될때까지 기다린다.
+
 
 #### LINK
 

@@ -6,7 +6,9 @@ import RightBox from '@/components/RightBox';
 import MapSection from '@/components/home/MapSection';
 import { Store } from '../types/store';
 import { useActions, useValues } from '@/context/procider';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
+import { INITIAL_CENTER, INITIAL_ZOOM } from '@/hooks/useMap';
+import DetailSection from '@/components/home/DetailSection';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,7 +18,12 @@ interface Props {
 }
 
 export default function Home({ stores }: Props) {
+  const { map } = useValues();
   const { setStores } = useActions();
+
+  const resetMapOptions = useCallback(() => {
+    map?.morph(new naver.maps.LatLng(...INITIAL_CENTER), INITIAL_ZOOM);
+  }, [map]);
 
   useEffect(() => {
     setStores(stores);
@@ -31,9 +38,10 @@ export default function Home({ stores }: Props) {
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
       <>
-        <Header RightElements={<RightBox />} />
-        <main className={styles.main} style={{}}>
+        <Header onClickLogo={resetMapOptions} RightElements={<RightBox />} />
+        <main className={styles.main}>
           <MapSection />
+          <DetailSection />
         </main>
       </>
     </>
@@ -42,7 +50,6 @@ export default function Home({ stores }: Props) {
 
 export async function getStaticProps() {
   const stores = await (await import('../public/stores.json')).default;
-
   return {
     props: { stores },
     revalidate: 60 * 60,

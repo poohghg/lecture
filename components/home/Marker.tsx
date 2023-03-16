@@ -1,28 +1,38 @@
 import { NaverMap } from '@/types/map';
-import { memo, useEffect } from 'react';
+import { Store } from '@/types/store';
+import { memo, useCallback, useEffect, useMemo } from 'react';
 import type { Marker } from '../../types/map';
+import { generateStoreMarkerIcon } from './Markers';
 
-interface Props extends Marker {
-  // map: NaverMap;
-  // coordinates:
-  // onClick:()=>void
+interface Props {
+  map: NaverMap;
+  store: Store;
+  flage: boolean;
+  handelClick?: (store: Store) => void;
 }
 
-const Marker = ({ coordinates, icon, map, onClick }: Props) => {
-  useEffect(() => {
+const Marker = ({ map, store, handelClick, flage = false }: Props) => {
+  const marker = useMemo(() => {
     let marker: naver.maps.Marker | null = null;
     if (map) {
       marker = new naver.maps.Marker({
         map,
-        position: new naver.maps.LatLng(...coordinates),
-        icon,
+        position: new naver.maps.LatLng(...store.coordinates),
+        icon: generateStoreMarkerIcon(store.episode),
       });
+      if (handelClick)
+        naver.maps.Event.addListener(marker, 'click', () => handelClick(store));
     }
-    if (onClick) naver.maps.Event.addListener(marker, 'click', onClick);
-    return () => {
-      marker?.setMap(null);
-    };
-  }, [map, icon]);
+    return marker;
+  }, [map]);
+
+  useEffect(() => {
+    return () => marker?.setMap(null);
+  }, [marker]);
+
+  useEffect(() => {
+    marker?.setIcon(generateStoreMarkerIcon(store.episode, flage));
+  }, [flage]);
   return null;
 };
 
