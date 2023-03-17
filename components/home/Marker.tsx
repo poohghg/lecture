@@ -11,7 +11,7 @@ interface Props {
   handelClick?: (store: Store) => void;
 }
 
-const Marker = ({ map, store, handelClick, flage = false }: Props) => {
+const Marker = ({ map, store, flage = false, handelClick }: Props) => {
   const marker = useMemo(() => {
     let marker: naver.maps.Marker | null = null;
     if (map) {

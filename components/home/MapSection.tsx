@@ -11,10 +11,12 @@ const MapSection = () => {
   const router = useRouter();
   const { clearCurrentStore, setMap } = useActions();
   const query = useMemo(() => new URLSearchParams(router.asPath.slice(1)), []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const initialZoom = useMemo(
     () => (query.get('zoom') ? Number(query.get('zoom')) : INITIAL_ZOOM),
     [query]
   );
+
   const initialCenter = useMemo<Coordinates>(
     () =>
       query.get('lat') && query.get('lng')
@@ -24,7 +26,6 @@ const MapSection = () => {
   );
 
   const onLoadMap = useCallback((map: NaverMap) => {
-    console.log('map', map);
     setMap(map);
     naver.maps.Event.addListener(map, 'click', clearCurrentStore);
   }, []);

@@ -268,6 +268,8 @@ link는 next.js에서 사용되는 라우터이다. link를 사용하면 spa처�
 
 #### next/img
 
+https://nextjs.org/docs/api-reference/next/image#sizes
+
 next에서 사용하는 이미지를 static하게 import했다면 빌드타임에 이미지에 대한 정보를 가지고 있다.
 
 만약에 동적이미지 소스를 사용한다면 반드시 넓이와 높이를 명시해야한다.
